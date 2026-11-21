@@ -17,7 +17,29 @@ POEM = (
 )
 
 
+MAX_POEM_LENGTH = 280
+
+
+def validate_poem(poem: str) -> None:
+    """Check the poem is a non-empty, short-enough entry before writing.
+
+    Length is counted in Unicode code points (Python's len on str), and
+    the poem must not be only whitespace.
+    """
+    if not poem.strip():
+        raise ValueError(
+            "Poem must not be empty or whitespace-only; got an empty poem."
+        )
+    length = len(poem)
+    if not 1 <= length <= MAX_POEM_LENGTH:
+        raise ValueError(
+            f"Poem must be 1-{MAX_POEM_LENGTH} characters long, "
+            f"got {length} characters."
+        )
+
+
 def main() -> None:
+    validate_poem(POEM)
     output_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
     os.makedirs(output_dir, exist_ok=True)
     path = os.path.join(output_dir, "entry.txt")
